@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 
 class Wallet extends React.Component {
   render() {
-    console.log(this.props);
-    const { user } = this.props;
     return (
       <main>
-        <h2>TrybeWallet</h2>
-        <h2>{user.email}</h2>
+        <Header />
       </main>
     );
   }
