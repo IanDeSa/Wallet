@@ -24,3 +24,5 @@ export const viewWallet = () => async (dispatch) => {
   const currencies = Object.keys(resolve).filter((cur) => !cur.includes('USDT'));
   dispatch(receiveCurrencies(currencies));
 };
+
+export default viewWallet;
