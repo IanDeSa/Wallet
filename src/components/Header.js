@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { viewWallet } from '../actions';
 
 class Header extends Component {
   constructor() {
@@ -8,6 +9,11 @@ class Header extends Component {
     this.state = {
       expenses: 0,
     };
+  }
+
+  async componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch(viewWallet());
   }
 
   render() {
@@ -38,4 +44,5 @@ Header.propTypes = {
   user: PropTypes.shape({
     email: PropTypes.string,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };

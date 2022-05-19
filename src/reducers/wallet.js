@@ -10,8 +10,7 @@ const wallet = (state = INITIAL_STATE, action) => {
   case VIEW_WALLET:
     return {
       ...state,
-      currencies: [action.payload],
-      expenses: [action.payload],
+      currencies: action.payload.currencies,
     };
   default:
     return state;

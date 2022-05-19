@@ -5,9 +5,9 @@ import Header from '../components/Header';
 class Wallet extends React.Component {
   render() {
     return (
-      <main>
+      <section>
         <Header />
-      </main>
+      </section>
     );
   }
 }
