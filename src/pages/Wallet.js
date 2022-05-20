@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import { fetchWallet, fetchExchangeRates } from '../actions';
+import Table from '../components/Table';
+
+const tagDefault = 'Alimentação';
 
 class Wallet extends React.Component {
   constructor() {
@@ -12,7 +15,7 @@ class Wallet extends React.Component {
       description: '',
       currency: 'USD',
       method: 'Dinheiro',
-      tag: '',
+      tag: tagDefault,
     };
   }
 
@@ -35,14 +38,13 @@ class Wallet extends React.Component {
       description: '',
       currency: 'USD',
       method: 'Dinheiro',
-      tag: 'Alimentação',
+      tag: tagDefault,
     });
   }
 
   render() {
-    const { value, description, currency, method, tag } = this.state;
+    const { value, description } = this.state;
     const { wallet: { currencies } } = this.props;
-    console.log(currency, tag, method);
     return (
       <section>
         <Header />
@@ -100,7 +102,7 @@ class Wallet extends React.Component {
               name="tag"
               onChange={ this.handleChange }
             >
-              <option value="Alimentação">Alimentação</option>
+              <option value={ tagDefault }>{ tagDefault }</option>
               <option value="Lazer">Lazer</option>
               <option value="Trabalho">Trabalho</option>
               <option value="Transporte">Transporte</option>
@@ -113,6 +115,7 @@ class Wallet extends React.Component {
             Adicionar despesa
           </button>
         </form>
+        <Table />
       </section>
     );
   }
