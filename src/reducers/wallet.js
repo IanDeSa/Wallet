@@ -3,6 +3,7 @@ import {
   REQUEST_FAILURE,
   REQUEST_LOADING,
   FETCH_EXCHANGE_RATES_SUCESS,
+  DELETE_EXPENSE,
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -36,6 +37,11 @@ const wallet = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: [...state.expenses, action.payload],
+    };
+  case DELETE_EXPENSE:
+    return {
+      ...state,
+      expenses: [...state.expenses].filter((expense) => expense.id !== action.payload),
     };
   default:
     return state;

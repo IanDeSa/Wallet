@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { deleteExpense } from '../actions';
 
 class Table extends Component {
+  handleClickEdit = (id) => {
+    const { wallet: { expenses } } = this.props;
+    console.log(typeof expenses[id]);
+  }
+
+  handleClickDelete = (id) => {
+    const { dispatch } = this.props;
+    dispatch(deleteExpense(id));
+  }
+
   render() {
     const { wallet: { expenses } } = this.props;
     return (
@@ -22,8 +33,8 @@ class Table extends Component {
               <th>Editar/Excluir</th>
             </tr>
           </thead>
-          {expenses.map((expense, index) => (
-            <tbody key={ index }>
+          {expenses.map((expense) => (
+            <tbody key={ expense.id }>
               <tr>
                 <td>{expense.description}</td>
                 <td>{expense.tag}</td>
@@ -42,13 +53,15 @@ class Table extends Component {
                 <td>
                   <button
                     type="button"
-                    data-testid="delete-btn"
+                    data-testid="edit-btn"
+                    onClick={ () => this.handleClickEdit(expense.id) }
                   >
                     Editar
                   </button>
                   <button
                     type="button"
-                    data-testid="edit-btn"
+                    data-testid="delete-btn"
+                    onClick={ () => this.handleClickDelete(expense.id) }
                   >
                     Excluir
                   </button>
@@ -68,6 +81,7 @@ Table.propTypes = {
   wallet: PropTypes.shape({
     expenses: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(Table);

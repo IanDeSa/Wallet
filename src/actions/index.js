@@ -5,6 +5,7 @@ export const REQUEST_LOADING = 'REQUEST_LOADING';
 export const FETCH_EXCHANGE_RATES_SUCESS = 'FETCH_EXCHANGE_RATES_SUCESS';
 export const EXPENSES_LOADING = 'EXPENSES_LOADING';
 export const FAILED_EXPENSES = 'FAILED_EXPENSES';
+export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 export const saveUser = (state) => ({
   type: SAVE_USER,
@@ -51,6 +52,11 @@ export const sendExpenses = (state, id, exchangeRates) => ({
     ...state,
     exchangeRates,
   },
+});
+
+export const deleteExpense = (id) => ({
+  type: DELETE_EXPENSE,
+  payload: id,
 });
 
 export const fetchExchangeRates = (state, index) => async (dispatch) => {
