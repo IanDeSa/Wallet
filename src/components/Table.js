@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deleteExpense } from '../actions';
+import { deleteExpense, editExpense } from '../actions';
 
 class Table extends Component {
   handleClickEdit = (id) => {
-    const { wallet: { expenses } } = this.props;
-    console.log(typeof expenses[id]);
+    const { dispatch } = this.props;
+    dispatch(editExpense(id));
   }
 
   handleClickDelete = (id) => {
@@ -47,7 +47,8 @@ class Table extends Component {
                 </td>
                 <td>{Number(expense.exchangeRates[expense.currency].ask).toFixed(2)}</td>
                 <td>
-                  {expense.value * expense.exchangeRates[expense.currency].ask}
+                  {Number(expense.value
+                    * expense.exchangeRates[expense.currency].ask).toFixed(2)}
                 </td>
                 <td>Real</td>
                 <td>

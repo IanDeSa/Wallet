@@ -4,6 +4,8 @@ import {
   REQUEST_LOADING,
   FETCH_EXCHANGE_RATES_SUCESS,
   DELETE_EXPENSE,
+  EDIT_EXPENSE,
+  SEND_NEW_EXPENSES,
 } from '../actions';
 
 const INITIAL_STATE = {
@@ -11,6 +13,7 @@ const INITIAL_STATE = {
   expenses: [],
   error: null,
   loading: false,
+  edit: false,
 };
 
 const wallet = (state = INITIAL_STATE, action) => {
@@ -42,6 +45,20 @@ const wallet = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: [...state.expenses].filter((expense) => expense.id !== action.payload),
+    };
+  case EDIT_EXPENSE:
+    return {
+      ...state,
+      edit: true,
+      selectId: action.payload.id,
+    };
+  case SEND_NEW_EXPENSES:
+    return {
+      ...state,
+      edit: false,
+      expenses: [...state.expenses].map((expense) => (
+        expense.id === action.payload.id ? { ...expense, ...action.payload } : expense
+      )),
     };
   default:
     return state;

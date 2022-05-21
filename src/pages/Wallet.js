@@ -2,10 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { fetchWallet, fetchExchangeRates } from '../actions';
+import { fetchWallet, fetchExchangeRates, sendNewExpenses } from '../actions';
 import Table from '../components/Table';
-
-const tagDefault = 'Alimentação';
 
 class Wallet extends React.Component {
   constructor() {
@@ -15,11 +13,11 @@ class Wallet extends React.Component {
       description: '',
       currency: 'USD',
       method: 'Dinheiro',
-      tag: tagDefault,
+      tag: 'Alimentação',
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchWallet(this.state));
   }
@@ -28,7 +26,7 @@ class Wallet extends React.Component {
     this.setState({ [target.name]: target.value });
   }
 
-  handleSubmit = (event) => {
+  handleClick = (event) => {
     event.preventDefault();
     const { dispatch, wallet: { expenses } } = this.props;
     const index = expenses.length;
@@ -36,19 +34,26 @@ class Wallet extends React.Component {
     this.setState({
       value: '',
       description: '',
-      currency: 'USD',
-      method: 'Dinheiro',
-      tag: tagDefault,
+    });
+  }
+
+  handleEdit = (event) => {
+    event.preventDefault();
+    const { dispatch, wallet: { selectId: id } } = this.props;
+    dispatch(sendNewExpenses(id, this.state));
+    this.setState({
+      value: '',
+      description: '',
     });
   }
 
   render() {
     const { value, description } = this.state;
-    const { wallet: { currencies } } = this.props;
+    const { wallet: { currencies, edit } } = this.props;
     return (
       <section>
         <Header />
-        <form onSubmit={ this.handleSubmit }>
+        <form>
           <label htmlFor="value-input-id">
             Valor:
             <input
@@ -57,7 +62,6 @@ class Wallet extends React.Component {
               data-testid="value-input"
               name="value"
               value={ value }
-              required
               onChange={ this.handleChange }
             />
           </label>
@@ -69,13 +73,17 @@ class Wallet extends React.Component {
               data-testid="description-input"
               name="description"
               value={ description }
-              required
               onChange={ this.handleChange }
             />
           </label>
           <label htmlFor="currency">
             Moeda:
-            <select id="currency" name="currency" onChange={ this.handleChange }>
+            <select
+              id="currency"
+              data-testid="currency-input"
+              name="currency"
+              onChange={ this.handleChange }
+            >
               {(Object.values(currencies).map(
                 (code, index) => <option key={ index } value={ code }>{code}</option>,
               ))}
@@ -102,18 +110,22 @@ class Wallet extends React.Component {
               name="tag"
               onChange={ this.handleChange }
             >
-              <option value={ tagDefault }>{ tagDefault }</option>
+              <option value="Alimentação">Alimentação</option>
               <option value="Lazer">Lazer</option>
               <option value="Trabalho">Trabalho</option>
               <option value="Transporte">Transporte</option>
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-          <button
-            type="submit"
-          >
-            Adicionar despesa
-          </button>
+          {!edit
+            ? (
+              <button type="submit" onClick={ this.handleClick }>
+                Adicionar despesa
+              </button>)
+            : (
+              <button type="submit" onClick={ this.handleEdit }>
+                Editar despesa
+              </button>)}
         </form>
         <Table />
       </section>
@@ -128,6 +140,8 @@ Wallet.propTypes = {
   wallet: PropTypes.shape({
     currencies: PropTypes.arrayOf(PropTypes.string),
     expenses: PropTypes.arrayOf(PropTypes.object),
+    edit: PropTypes.bool,
+    selectId: PropTypes.number,
   }).isRequired,
 };
 
